@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="openssl-gtk",
-    version="0.1.beta1",
+    version="0.1.beta2",
     author="Muhammed Çamsarı",
     license='MIT',
     author_email="Muhammedcamsari@icloud.com",
@@ -13,11 +13,17 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/muhammedcamsari/openssl-gtk",
+    keywords=['openssl', 'openssl-gui', 'security', 'encrypt'],
     classifiers=[
+        "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
+        "Intended Audience :: End Users/Desktop",
+        "Topic :: Desktop Environment :: Gnome",
+        "Natural Language :: Turkish",
         "Operating System :: OS Independent",
     ],
+    include_package_data=True,
     scripts=["openssl-gui.py"],
     packages = ['openssl_gtk'],
 )
