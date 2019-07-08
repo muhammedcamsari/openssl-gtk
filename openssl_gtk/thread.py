@@ -151,3 +151,95 @@ def sifre_cozme_thread(self, widget):
 			self.kapat_coz.set_sensitive(True)
 			self.progressbar_coz.set_fraction(100)
 
+def Genrsa_thread(self, widget):
+	var = 0
+	print ('Thread > RSA GEN Başladı.')
+	print ('Thread > %s' % self.kayit_dosya + '.pem')
+	print ('Thread > %s' % self.genrsa_cipher_secilen)
+	print ('Thread > %s' % self.genrsa_size_secilen)
+	print ('Thread > %s' % self.acik_anahtar_durum)
+
+	self.end = self.rsa_gen_buffer.get_end_iter()
+	self.rsa_gen_buffer.insert(self.end, 'Anahtar oluşturma işlemi başlıyor..')
+	self.rsa_gen_buffer.insert(self.end, '\n\nKayıt Yeri: ' + self.kayit_dosya + '.pem')
+
+	if self.acik_anahtar_durum == True:
+		self.rsa_gen_buffer.insert(self.end, '\nAçık Anahtar Kayıt Yeri: ' + self.kayit_dosya + '_public_key.pem')
+
+	self.rsa_gen_buffer.insert(self.end, '\nCipher Seçimi: ' + self.genrsa_cipher_secilen)
+	self.rsa_gen_buffer.insert(self.end, '\nAnahtar Boyutu: ' + self.genrsa_size_secilen)
+
+	self.rsa_pen_progressbar.set_fraction(20)
+
+	if var == 0:
+		self.rsa_pen_label1.set_text('Anahtar oluşturuluyor..')
+		self.rsa_pen_progressbar.set_fraction(50)
+
+		komutS = 'openssl genrsa -' + self.genrsa_cipher_secilen + ' -out ' + self.kayit_dosya + '.pem'
+		print (komutS)
+		self.rsa_gen_buffer.insert(self.end, '\n\n' + komutS)
+
+		komut = subprocess.Popen(['openssl', 'genrsa',  '-' + self.genrsa_cipher_secilen,  '-passout', 'pass:' + self.genrsa_parola1.get_text(), '-out', self.kayit_dosya + '.pem', self.genrsa_size_secilen], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		print (self.genrsa_parola1.get_text())
+		output, error = komut.communicate()
+
+		self.rsa_pen_progressbar.pulse()
+
+		if komut.returncode == 0: # HATA YOK
+			self.rsa_pen_label1.set_text('Açık Anahtar oluşturuluyor..')
+			print ('Durum > OK')
+			print (error)
+			self.rsa_gen_buffer.insert(self.end, '\n\n' + str(error))
+
+			self.rsa_pen_progressbar.set_fraction(70)
+
+			if self.acik_anahtar_durum == True: # Açık Anahtar Oluşturulacaksa
+				komut2 = subprocess.Popen(['openssl', 'rsa', '-' + self.genrsa_cipher_secilen , '-in',  self.kayit_dosya + '.pem', '-passin', 'pass:' + self.genrsa_parola1.get_text(), '-pubout', '-out',self.kayit_dosya + '_public_key.pub'])
+				komut2_S = 'openssl rsa -' + self.genrsa_cipher_secilen + ' -in ' + self.kayit_dosya + '.pem -pubout -out ' + self.kayit_dosya + '_public_key.pub'
+				print (komut2_S)
+				self.rsa_gen_buffer.insert(self.end, '\n\n' + komut2_S)
+
+				output2, error2 = komut2.communicate()
+
+				if komut2.returncode == 0:
+					print ('Thread > PUBLIC KEY > OK')
+					if os.path.isfile(self.kayit_dosya+'_public_key.pub'):
+						self.rsa_gen_buffer.insert(self.end, '\n\nAçık Anahtar Oluşturuldu.')
+						self.rsa_gen_buffer.insert(self.end, '\n\nBitti.')
+					self.rsa_gen_button.set_sensitive(True)
+
+				if komut2.returncode == 1:
+					print ('Thread > PUBLIC KEY > HATA')
+					self.rsa_gen_buffer.insert(self.end, '\n\nBir hata ile karşılaşıldı.')
+					if os.path.isfile(self.kayit_dosya+'.pem'):
+						self.rsa_gen_buffer.insert(self.end, '\n\nGizli anahtar oluşturuldu ama açık anahtar oluşturulamadı.')
+
+					self.rsa_gen_buffer.insert(self.end, error2)
+					self.rsa_gen_buffer.insert(self.end, output2)
+					self.rsa_gen_button.set_sensitive(True)
+
+
+
+			if self.acik_anahtar_durum == False: # Açık anahtar oluşturulmayacaksa
+				self.rsa_pen_progressbar.set_fraction(100)
+				self.rsa_pen_label1.set_text('Açık Anahtar Oluşturuldu..')
+				print ('Thread > Bitti.')
+				self.rsa_gen_buffer.insert(self.end, '\n\nBitti.')
+				self.rsa_gen_button.set_sensitive(True)
+
+
+		if komut.returncode == 1: # Hata Varsa
+			self.rsa_pen_label1.set_text('Anahtar oluşturulamadı..')
+
+			print (output, error)
+			print ('İşlem hata ile sonlandı.')
+
+			self.rsa_gen_buffer.insert(self.end, '\n\nAnahtar oluşturma sırasında bir hata ile karşılaşıldı.')
+			self.rsa_gen_buffer.insert(self.end, '\n\n' + str(error))
+			self.rsa_gen_buffer.insert(self.end, '\n\n' + str(output))
+
+			self.rsa_gen_buffer.insert(self.end, '\nBitti.')
+			self.rsa_pen_progressbar.set_fraction(100)
+			self.rsa_gen_button.set_sensitive(True)
+
+

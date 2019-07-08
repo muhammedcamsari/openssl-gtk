@@ -45,7 +45,7 @@ def hakkinda(self, widget):
 	self.copyright.set_justify(Gtk.Justification.CENTER)
 
 	self.lisans = Gtk.Label()
-	self.lisans.set_markup('<span font_size="13000" color="#000">' + info.__appname__ + ' Hiç bir garanti vermez.\nKullanım amacı kullanıcının sorumluluğundadır\nDaha fazla bilgi için ' + info.__license__ + ' lisansını inceleyiniz.' + '</span>')
+	self.lisans.set_markup('<span font_size="13000" color="#000">' + info.__legalnote__ + '</span>')
 	self.lisans.set_justify(Gtk.Justification.CENTER)
 
 	self.hakkinda_grid.add(self.logo)
@@ -59,7 +59,7 @@ def hakkinda(self, widget):
 
 
 def surum_notlari(self, widget):
-	self.surum = Gtk.Window(title=info.__appname__ + ' ' + info.__version__ + ' Sürüm Notları')
+	self.surum = Gtk.Window(title=info.__appname__ + ' ' + info.__version__ + ' ' + info.__status__ + ' Sürüm Notları')
 	self.surum.connect("destroy", self.surum.destroy)
 	self.surum.set_size_request(400, 370)
 	# self.surum.set_position(Gtk.WindowPosition.CENTER) # Ekran ortalaması
@@ -75,7 +75,7 @@ def surum_notlari(self, widget):
 	self.logo.set_from_file(info.__logo__) #Resim belirtildi
 
 	self.ad_surum = Gtk.Label()
-	self.ad_surum.set_markup('<b> <big>'+info.__appname__ + ' ' + info.__version__+' Sürüm Notları</big></b> ')
+	self.ad_surum.set_markup('<b> <big>'+info.__appname__ + ' ' + info.__version__  + ' ' + info.__status__ +' Sürüm Notları</big></b> ')
 
 
 	self.scroll = Gtk.ScrolledWindow() # Scroll oluşturuldu
@@ -202,4 +202,47 @@ def sifre_cozme(self, widget):
 	GLib.idle_add(lambda: thd.sifre_cozme_thread(self, widget), priority=GLib.PRIORITY_HIGH)
 
 
+def rsa_olusturucu(self, widget):
+	self.rsa_pen = Gtk.Window(title=' GenRSA')
+	self.rsa_pen.set_resizable(False)
+	self.rsa_pen.set_size_request(300, 250)
+	self.rsa_pen.unmaximize()
 
+	self.rsa_grid = Gtk.Grid()
+	self.rsa_pen.add(self.rsa_grid)
+	self.rsa_grid.set_row_spacing(5)
+	self.rsa_grid.set_border_width(5)
+
+	self.rsa_pen_label1 = Gtk.Label(label='RSA Anahtarı Oluşturma İşlemi Başlıyor..')
+	self.rsa_pen_label1.set_alignment(0, 0.5)
+
+	self.rsa_pen_progressbar = Gtk.ProgressBar()
+	self.rsa_pen_progressbar.activity_mode = False
+	self.rsa_pen_progressbar.set_fraction(0.0)
+
+
+	self.rsa_pen_scroll = Gtk.ScrolledWindow()
+	self.rsa_pen_scroll.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+	self.rsa_pen_scroll.set_size_request(450, 170)
+	self.rsa_pen_scroll.set_border_width(2)
+
+	self.rsa_gen_buffer = Gtk.TextBuffer()
+
+	self.rsa_gen_textview = Gtk.TextView(buffer=self.rsa_gen_buffer)
+	self.rsa_gen_textview.set_wrap_mode(Gtk.WrapMode.WORD)
+	self.rsa_gen_textview.set_editable(False)
+
+	self.rsa_pen_scroll.add(self.rsa_gen_textview)
+
+	self.rsa_gen_button = Gtk.Button(label='Pencereyi Kapat')
+	self.rsa_gen_button.connect("clicked", self.rsa_pen.destroy)
+	self.rsa_gen_button.set_sensitive(False)
+
+	self.rsa_grid.add(self.rsa_pen_label1)
+	self.rsa_grid.attach(self.rsa_pen_progressbar, 0, 1, 1, 1)
+	self.rsa_grid.attach(self.rsa_pen_scroll, 0, 2, 1, 1)
+	self.rsa_grid.attach(self.rsa_gen_button, 0, 3, 1, 1)
+
+	self.rsa_pen.show_all()
+
+	GLib.idle_add(lambda: thd.Genrsa_thread(self, widget), priority=GLib.PRIORITY_HIGH)
