@@ -10,9 +10,10 @@ OpenSSL-GTK, OpenSSL işlemlerini komut satırı kullanmaksızın gerçekleştir
 
 ## Desteklenen OpenSSL Modelleri
 
-1.0 sürümüyle OpenSSL-GTK, yalnızca OPENSSL ENC modelini destekler. 
+1.1 sürümüyle birlikte OpenSSL-GTK, GenRSA özelliğine kavuştu.
 
- - enc: Dosya şifreleme işlemleri için kullanılır.
+ - Enc: Dosya şifreleme işlemleri için kullanılır.
+ - GenRsa: Gizli ve Açık RSA anahtarı oluşturmak için kullanılır.
 
 
 ## OpenSSL-GTK Kurulumu
@@ -84,9 +85,10 @@ OpenSSL-GTK is a project that aims to perform OpenSSL operations without using a
 
 ## Supported OpenSSL Models
 
-With version 1.0, OpenSSL-GTK supports only the OPENSSL ENC model.
+With the release of 1.1, OpenSSL-GTK has become GenRSA.
 
- - enc: Used for file encryption operations.
+ - Enc: Used for file encryption operations.
+ - GenRSA: It is used to create a Private and Public RSA key.
 
 
 ## OpenSSL-GTK Install

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="openssl-gtk",
-    version="1.0.2",
+    version="1.0.3",
     author="Muhammed Çamsarı",
     license='MIT',
     author_email="Muhammedcamsari@icloud.com",
@@ -26,4 +26,6 @@ setuptools.setup(
     include_package_data=True,
     scripts=["openssl-gui.py"],
     packages = ['openssl_gtk'],
+    install_requires = ['opy-logger'],
+
 )
