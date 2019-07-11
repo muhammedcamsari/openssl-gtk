@@ -10,6 +10,7 @@ from gi.repository import GLib
 
 from openssl_gtk import app_info as info
 from openssl_gtk import thread as thd
+import opylogger as log
 
 """
 Bu dosya hakkinda, sürüm notları, şifreleme ve şifre çözme gibi pencereleri içerir.
@@ -17,6 +18,7 @@ Bu dosya hakkinda, sürüm notları, şifreleme ve şifre çözme gibi pencerele
 """
 	
 def hakkinda(self, widget):
+	log.info('Hakkında penceresi açıldı', 'Hakkında')
 	self.hakkinda = Gtk.Window(title=(info.__appname__ + ' Hakkında'))
 	self.hakkinda.connect("destroy", self.hakkinda.destroy)
 	self.hakkinda.set_resizable(False)
@@ -59,6 +61,7 @@ def hakkinda(self, widget):
 
 
 def surum_notlari(self, widget):
+	log.info('Sürüm Notları penceresi açıldı', 'Sürüm Notları')
 	self.surum = Gtk.Window(title=info.__appname__ + ' ' + info.__version__ + ' ' + info.__status__ + ' Sürüm Notları')
 	self.surum.connect("destroy", self.surum.destroy)
 	self.surum.set_size_request(400, 370)
@@ -103,6 +106,7 @@ def surum_notlari(self, widget):
 	self.surum.show_all()
 
 def dosya_sifreleme(self, widget):
+	log.info('Şifreleme penceresi açıldı', 'Şifrelenecek Dosya')
 	self.sifreleme = Gtk.Window(title='Dosya Şifreleniyor - ' + info.__appname__)
 	self.sifreleme.set_resizable(False)
 	self.sifreleme.set_size_request(300, 250)
@@ -156,6 +160,7 @@ def dosya_sifreleme(self, widget):
 	
 
 def sifre_cozme(self, widget):
+	log.info('Şifre çözümleme penceresi açıldı', 'Şifreli Dosya Çözümleme')
 	self.sifre_cozme = Gtk.Window(title='Dosya Şifresi Çözülüyor - ' + info.__appname__)
 	self.sifre_cozme.set_resizable(False)
 	self.sifre_cozme.set_size_request(300, 250)
@@ -203,6 +208,7 @@ def sifre_cozme(self, widget):
 
 
 def rsa_olusturucu(self, widget):
+	log.info('RSA oluşturma penceresi açıldı', 'RSA Oluşturma')
 	self.rsa_pen = Gtk.Window(title=' GenRSA')
 	self.rsa_pen.set_resizable(False)
 	self.rsa_pen.set_size_request(300, 250)

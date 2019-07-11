@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="openssl-gtk",
-    version="1.0.3",
+    version="1.0.4",
     author="Muhammed Çamsarı",
     license='MIT',
     author_email="Muhammedcamsari@icloud.com",

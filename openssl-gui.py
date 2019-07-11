@@ -9,12 +9,14 @@ from gi.repository import GLib
 from openssl_gtk import window as pen
 from openssl_gtk import app_info as info
 from openssl_gtk import thread as thd
+import opylogger as log
 
 
 class GUI(Gtk.Window):
 	def __init__(self):
 		Gtk.Window.__init__(self, title=info.__appname__)
 		self.connect("destroy", Gtk.main_quit)
+		log.info(info.__appname__ +' başlatıldı', info.__appname__)
 
 
 		self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -286,16 +288,17 @@ class GUI(Gtk.Window):
 	def genrsa_cipher_(self, widget):
 		self.genrsa_cipher_secilen = self.genrsa_cipher.get_active_text()
 		if self.genrsa_cipher_secilen is not None:
-			print('RSA Seçilen Cipher: %s' % self.genrsa_cipher_secilen)
+			log.info('RSA oluşturmak üzere seçilen Cipher: ' + self.genrsa_cipher_secilen, 'RSA Oluşturma')
 
 
 	def genrsa_size_(self, widget):
 		self.genrsa_size_secilen = self.genrsa_size.get_active_text()
 		if self.genrsa_size_secilen is not None:
-			print('RSA Seçilen Anahtar Boyutu: %s' % self.genrsa_size_secilen)
-
+			log.info('RSA oluşturmak üzere seçilen anahtar boyutu: ' + self.genrsa_size_secilen, 'RSA Oluşturma')
 
 	def rsa_kayit_yeri(self, widget):
+		log.info(info.__appname__ + ' RSA Key oluşturmak üzere dosya seçim penceresi açıldı', 'RSA Oluşturma')
+
 		rsa_save_filter = Gtk.FileFilter()
 		rsa_save_filter.set_name(".PEM dosyası")
 		rsa_save_filter.add_pattern("*.pem")
@@ -312,7 +315,7 @@ class GUI(Gtk.Window):
 
 		if yanit == Gtk.ResponseType.OK:
 			self.kayit_dosya = dialog.get_filename()
-			print("RSA Kayıt Edilecek yer: " + self.kayit_dosya + '.pem')
+			log.info('RSA oluşturmak üzere seçilen dosya: ' + self.kayit_dosya + '.pem', 'RSA Oluşturma')
 			self.genrsa_kayit_yeri.set_text(self.kayit_dosya)
 
 		elif yanit == Gtk.ResponseType.CANCEL:
@@ -323,6 +326,8 @@ class GUI(Gtk.Window):
 	##
 	# Şifreleme değişkenleri
 	def dosya_secim(self, widget): # Şifrelenecek Dosyayı Seçme Penceresi
+		log.info(info.__appname__ + ' Şifrelemek üzere dosya seçim penceresi açıldı', 'Şifrelenecek Dosya')
+
 		filtre_tum_dosyalar = Gtk.FileFilter()
 		filtre_tum_dosyalar.set_name("Tüm Dosyalar")
 		filtre_tum_dosyalar.add_pattern("*")
@@ -337,7 +342,7 @@ class GUI(Gtk.Window):
 		yanit = dialog.run()
 		if yanit == Gtk.ResponseType.OK:
 			self.sifrelenecek_dosya = dialog.get_filename()
-			print("Seçilen Dosya: " + self.sifrelenecek_dosya)
+			log.info('Şifrelenmek üzere seçilen dosya: ' +self.sifrelenecek_dosya, 'Şifrelenecek Dosya')
 			self.dosya_entry.set_text(self.sifrelenecek_dosya)
 
 		elif yanit == Gtk.ResponseType.CANCEL:
@@ -348,7 +353,7 @@ class GUI(Gtk.Window):
 	def cipher_enc(self, widget):
 		self.cipher_secilen = self.cipher_list.get_active_text()
 		if self.cipher_secilen is not None:
-			print('Seçilen Cipher: %s' % self.cipher_secilen)
+			log.info('Şifrelenmek üzere seçilen Cipher: ' + self.sifrelenecek_dosya, 'Şifrelenecek Dosya')
 
 		if self.cipher_secilen == 'aes-256-cbc (Önerilen)':
 			self.cipher_secilen = self.cipher_secilen.replace(' (Önerilen)', '')
@@ -356,7 +361,7 @@ class GUI(Gtk.Window):
 	def digest_enc(self, widget):
 		self.digest_secilen = self.digest_list.get_active_text()
 		if self.digest_secilen is not None:
-			print('Seçilen Digest: %s' % self.digest_secilen)
+			log.info('Şifrelenmek üzere seçilen Digest: ' + self.digest_secilen, 'Şifrelenecek Dosya')
 
 		if self.digest_secilen == 'sha256 (Önerilen)':
 			self.digest_secilen = self.digest_secilen.replace(' (Önerilen)', '')
@@ -366,6 +371,7 @@ class GUI(Gtk.Window):
 	## 
 	# Şifre çözme değişkenleri
 	def dosya_secim_dec(self, widget): # Şifrelenecek Dosyayı Seçme Penceresi
+		log.info(info.__appname__ + ' Şifrelesi çözülmek üzere dosya seçim penceresi açıldı', 'Şifreli Dosya Çözümleme')
 		filtre_enc_dosyalar = Gtk.FileFilter()
 		filtre_enc_dosyalar.set_name(info.__appname__ + ' Dosyaları (.enc)')
 		filtre_enc_dosyalar.add_pattern("*.enc")
@@ -380,7 +386,7 @@ class GUI(Gtk.Window):
 		yanit = dialog.run()
 		if yanit == Gtk.ResponseType.OK:
 			self.cozulecek_dosya = dialog.get_filename()
-			print("Şifresi Çözülecek Dosya: " + self.cozulecek_dosya)
+			log.info('Şifresi çözülmek üzere seçilen dosya: ' + self.cozulecek_dosya, 'Şifreli Dosya Çözümleme')
 			self.dosya_entry_dec.set_text(self.cozulecek_dosya)
 
 		elif yanit == Gtk.ResponseType.CANCEL:
@@ -392,7 +398,7 @@ class GUI(Gtk.Window):
 	def cipher_dec(self, widget):
 		self.cipher_secilen_dec = self.cipher_list_dec.get_active_text()
 		if self.cipher_secilen_dec is not None:
-			print ('Şifresi çözülmek istenen Cipher: %s' % self.cipher_secilen_dec)
+			log.info('Şifresi çözülmek üzere seçilen Cipher: ' + self.cipher_secilen_dec, 'Şifreli Dosya Çözümleme')
 
 		if self.cipher_secilen_dec == 'aes-256-cbc (Önerilen)':
 			self.cipher_secilen_dec = self.cipher_secilen_dec.replace(' (Önerilen)', '')
@@ -402,7 +408,7 @@ class GUI(Gtk.Window):
 	def digest_dec(self, widget):
 		self.digest_secilen_dec = self.digest_list_dec.get_active_text()
 		if self.digest_secilen_dec is not None:
-			print ('Şifresi	çözülmek istenen Digest: %s' % self.digest_secilen_dec)
+			log.info('Şifresi çözülmek üzere seçilen Digest: ' + self.digest_secilen_dec, 'Şifreli Dosya Çözümleme')
 
 		if self.digest_secilen_dec == 'sha256 (Önerilen)':
 			self.digest_secilen_dec = self.digest_secilen_dec.replace(' (Önerilen)', '')
@@ -414,81 +420,96 @@ class GUI(Gtk.Window):
 	def sifreleme_kontrol(self, widget):
 		var = 0
 		if self.sifrelenecek_dosya == None:
-			print ('Dosya Seçilmedi')
+			log.error('Dosya seçilmedi', 'Şifrelenecek Dosya')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Herhangi bir Dosya seçmediniz?\nBu işlem bir dosyaya ihtiyaç duyar!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'Şifrelenecek Dosya')
+
 
 		if self.cipher_secilen == None:
-			print ('Cipher Seçilmedi')
+			log.error('Cipher seçilmedi', 'Şifrelenecek Dosya')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Herhangi bir Cipher seçmediniz?\nBu işlem Cipher seçimine ihtiyaç duyar!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'Şifrelenecek Dosya')
+
 
 		if self.digest_secilen == None:
-			print ('Digest Seçilmedi')
+			log.error('Digest seçilmedi', 'Şifrelenecek Dosya')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Herhangi bir Digest seçmediniz?\nBu işlem Digest seçimine ihtiyaç duyar!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'Şifrelenecek Dosya')
+
 
 		if self.parola_entry.get_text() == '':
-			print ('Parola oluşturulmadı')
+			log.error('Parola alanı boş', 'Şifrelenecek Dosya')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Parola alanı boş olamaz?\nLütfen bir porola oluşturun!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'Şifrelenecek Dosya')
 
 		if self.parola_entry.get_text() != self.parola2_entry.get_text():
-			print ('Parolalar aynı değil')
-			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Parolalar aynı değil?\nLütfen parolaları dikkatlice yeniden oluşturun!")
+			log.error('Parolalar aynı değil', 'Şifrelenecek Dosya')
+			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Parolalar birbiriyle uyuşmuyor?\nLütfen parolaları dikkatlice yeniden oluşturun!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'Şifrelenecek Dosya')
+
 
 		if self.parola_entry.get_text() == self.parola2_entry.get_text():
-			print ('Parola aynı. OK')
-			self.parola = self.parola_entry.get_text()
-
+			if var == 0:
+				log.info('Parolalar birbiriyle uyuşuyor', 'Şifrelenecek Dosya')
+				self.parola = self.parola_entry.get_text()
 
 		if var == 0:
+			log.info('Dosya şifrelemek için her şey eksiksiz', 'Şifrelenecek Dosya')
 			pen.dosya_sifreleme(self, widget)
 
 	# Şifre Çözme Kontrol
 	def cozme_kontrol(self, widget):
 		var = 0
 		if self.cozulecek_dosya == None:
-			print ('Dosya Seçilmedi')
+			log.error('Dosya seçilmedi', 'Şifresi Çözülecek Dosya')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Herhangi bir Dosya seçmediniz?\nBu işlem bir dosyaya ihtiyaç duyar!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'Şifresi Çözülecek Dosya')
 
 
 		if self.cipher_secilen_dec == None:
-			print ('Cipher Seçilmedi')
+			log.error('Cipher seçilmedi', 'Şifresi Çözülecek Dosya')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Herhangi bir Cipher seçmediniz?\nBu işlem Cipher seçimine ihtiyaç duyar!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'Şifresi Çözülecek Dosya')
 
 		if self.digest_secilen_dec == None:
-			print ('Digest Seçilmedi')
+			log.error('Digest seçilmedi', 'Şifresi Çözülecek Dosya')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Herhangi bir Digest seçmediniz?\nBu işlem Digest seçimine ihtiyaç duyar!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'Şifresi Çözülecek Dosya')
 
 		if self.parola_entry_dec.get_text() == '':
-			print ('Parola oluşturulmadı')
+			log.error('Parola alanı boş', 'Şifresi Çözülecek Dosya')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Parola alanı boş olamaz?\nLütfen bir porola oluşturun!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
-		
+			log.info('Uyarı penceresi kapatıldı', 'Şifresi Çözülecek Dosya')
+
 		if var == 0:
+			log.info('Dosya çözülmeke için her şey eksiksiz', 'Şifresi Çözülecek Dosya')
 			pen.sifre_cozme(self, widget)
 
 
@@ -496,51 +517,60 @@ class GUI(Gtk.Window):
 	def genrsa_kontrol(self, widget):
 		var = 0
 		if self.kayit_dosya == None:
-			print ('Dosya kayıt yeri seçilmedi')
+			log.error('Dosya Seçilmedi', 'RSA Oluşturma')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Herhangi bir kayıt yeri seçmediniz?\nBu işlem bir kayıt yerine ihtiyaç duyar!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'RSA Oluşturma')
 
 		if self.genrsa_cipher_secilen == None:
-			print ('Cipher seçilmedi')
+			log.error('Cipher seçilmedi', 'RSA Oluşturma')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Herhangi bir Cipher seçmediniz?\nBu işlem Cipher seçimine ihtiyaç duyar!")
 			dialog.run()	
 			var += 1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'RSA Oluşturma')
 
 		if self.genrsa_size_secilen == None:
-			print ('Anahtar boyutu seçilmedi Seçilmedi')
+			log.error('Anahtar boyutu seçilmedi', 'RSA Oluşturma')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Herhangi bir anahtar boyutu seçmediniz?\nBu işlem anahtar boyutuna seçimine ihtiyaç duyar!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'RSA Oluşturma')
 
 		if self.genrsa_parola1.get_text() == '':
-			print ('Parola oluşturulmadı')
+			log.error('Parola alanı boş', 'RSA Oluşturma')
 			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Parola alanı boş olamaz?\nLütfen bir porola oluşturun!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'RSA Oluşturma')
 
 		elif self.genrsa_parola1.get_text() != self.genrsa_parola2.get_text():
-			print ('parola aynı değil')
-			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Parolalar aynı değil?\nLütfen parolaları dikkatlice yeniden oluşturun!")
+			log.error('Parolalar uyuşmuyor', 'RSA Oluşturma')
+			dialog = Gtk.MessageDialog(parent=Gtk.Window(), flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CANCEL, text="Parolalar birbiriyle uyuşmuyor?\nLütfen parolaları dikkatlice yeniden oluşturun!")
 			dialog.run()
 			var = +1
 			dialog.destroy()
+			log.info('Uyarı penceresi kapatıldı', 'RSA Oluşturma')
 
 		elif self.genrsa_parola1 == self.genrsa_parola2:
+			log.info('Parolalar uyuşuyor', 'RSA Oluşturma')
 			self.genrsa_parola = self.genrsa_parola1.get_text()
-			print ('getttext: ' + self.genrsa_parola1.get_text())
 
 		if var == 0:
 			self.acik_anahtar_durum = self.genrsa_acik_anahtar.get_active()
+			if self.acik_anahtar_durum == True:
+				log.info('Açık anahtar tercih edildi', 'RSA Oluşturma')
+
+			elif self.acik_anahtar_durum == False:
+				log.info('Açık anahtar tercih edilmedi', 'RSA Oluşturma')
+
+			log.info('RSA anahtar oluşturmak için her şey eksiksiz', 'RSA Oluşturma')
 			pen.rsa_olusturucu(self, widget)
 		
-
-
-
 
 	# Sürüm notları penceresi
 	def surum_notlari(self, widget):
