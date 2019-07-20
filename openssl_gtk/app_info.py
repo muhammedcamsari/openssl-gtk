@@ -11,8 +11,8 @@ __appname__ = "OpenSSL-GTK"
 __definition__ = "Terminal kullanmadan Openssl işlemlerinizi gerçekleştirin."
 __copyright__ = "Copyright (c) 2019 " + __author__
 __license__ = "MIT"
-__version__ = "1.1.2"
-__status__ = "Alpha"
+__version__ = "1.1"
+__status__ = "Beta"
 __email__ = "muhammedcamsari@icloud.com"
 __pgp__ = 'F294 1D36 A8C8 101B EEB0  16A7 B260 DBA5 2DAA 962A'
 __legalnote__ = __appname__ + ' hiçbir garanti vermez.\nKullanım amacı tamamen kullanıcının sorumluluğundadır. \nDaha fazla bilgi için ' + __license__ + ' lisansını inceleyiniz.'
@@ -29,13 +29,14 @@ surum_notlari = """
 
  * GenRSA modeli eklendi.
  * GenRSA modeli ile açık anahtarı dışa aktarabilme özelliği eklendi.
- * Hakkımızda ve sürüm notları penceresindeki logo sorunu giderildi.
+ * Log yönetimi için Opy-Logger entegrasyonu tamamlandı.
+ * Hakkımızda ve sürüm notları penceresindeki görüntü sorunu giderildi.
  * Dosya seçme penceresindeki PyGTKDeprecationWarning hatası giderildi.
  * Hata mesajları penceresindeki PyGTKDeprecationWarning hataları giderildi.
  * Sürüm notları penceresindeki başlık metnine durum bilgisi eklendi.
  * Hakkında penceresindeki yasal uyarı metninde düzenlemeler yapıldı.
 
 
-Bu beta sürüm ve hatayla karşılaşılma olasılığı oldukça yüksek.
+OpenSSL-GTK hala geliştirme aşamasında ve hatayla karşılaşma olasılığınız yüksek.
 Lütfen karşılaştığınız hataları geliştiriye bildirin: muhammedcamsari@icloud.com
 """
