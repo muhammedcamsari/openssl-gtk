@@ -46,6 +46,8 @@ Windows desteği henüz yok.
 
 Python: >=3.5
 
+opy-logger >=1.1
+
 Pygobject (python-gi): >=3.18
 
 Openssl: >=1.0.2 ( LibreSSL >=2.5 )
@@ -119,6 +121,8 @@ No Windows support yet.
 ## Requirements
 
 Python: >=3.5
+
+opy-logger >=1.1
 
 Pygobject (python-gi): >=3.18
 

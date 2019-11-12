@@ -9,8 +9,10 @@ from gi.repository import GLib
 from openssl_gtk import window as pen
 from openssl_gtk import app_info as info
 from openssl_gtk import thread as thd
-import opylogger as log
+import opylogger
 
+
+log = opylogger.log()
 
 class GUI(Gtk.Window):
 	def __init__(self):

@@ -10,12 +10,13 @@ from gi.repository import GLib
 
 from openssl_gtk import app_info as info
 from openssl_gtk import thread as thd
-import opylogger as log
+import opylogger
 
 """
 Bu dosya hakkinda, sürüm notları, şifreleme ve şifre çözme gibi pencereleri içerir.
 
 """
+log = opylogger.log()
 	
 def hakkinda(self, widget):
 	log.info('Hakkında penceresi açıldı', 'Hakkında')

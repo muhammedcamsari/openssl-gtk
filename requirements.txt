@@ -1,1 +1,1 @@
-opy-logger>=1.0
+opy-logger>=2.0

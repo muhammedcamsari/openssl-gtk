@@ -12,7 +12,9 @@ from gi.repository import Gtk
 from openssl_gtk import app_info as info
 import os
 import subprocess
-import opylogger as log
+import opylogger 
+
+log = opylogger.log()
 
 def sifreleme_thread(self, widget):
 	var = 0
@@ -49,14 +51,14 @@ def sifreleme_thread(self, widget):
 
 			log.info('Şifreleme başarılı', 'Şifrelenecek Dosya Thread')
 			log.info('Durum kodu: ' + str(komut.returncode), 'Şifrelenecek Dosya Thread')
-			log.info('Son değer: ' + str(error), 'Şifrelenecek Dosya Thread')
+			log.output('Son değer: ' + str(error), 'Şifrelenecek Dosya Thread')
 
 
 			self.okunan = os.path.getsize(self.sifrelenecek_dosya)
 			self.yazilan = os.path.getsize(self.sifrelenecek_dosya + '.enc')
 
-			log.info('Okunan boyut :' + str(self.okunan), 'Şifrelenecek Dosya Thread')
-			log.info('Yazılan boyut :' + str(self.yazilan), 'Şifrelenecek Dosya Thread')
+			log.output('Okunan boyut :' + str(self.okunan), 'Şifrelenecek Dosya Thread')
+			log.output('Yazılan boyut :' + str(self.yazilan), 'Şifrelenecek Dosya Thread')
 
 			self.buffer.insert(self.end, '\n\nOkunan bayt: ' + str(self.okunan))
 			self.buffer.insert(self.end, '\nYazılan bayt: ' + str(self.yazilan))
@@ -118,14 +120,14 @@ def sifre_cozme_thread(self, widget):
 
 			log.info('Çözümleme başarılı', 'Şifrelenecek Dosya Thread')
 			log.info('Durum kodu: ' + str(komut.returncode), 'Şifreli Dosya Çözümleme Thread')
-			log.info('Son değer: \n' + str(error), 'Şifreli Dosya Çözümleme Thread')
+			log.output('Son değer: \n' + str(error), 'Şifreli Dosya Çözümleme Thread')
 
 
 			self.okunan = os.path.getsize(self.cozulecek_dosya)
 			self.yazilan = os.path.getsize(self.cozulecek_dosya_temizlenen) # DİKKAT
 
-			log.info('Okunan boyut: ' + str(self.okunan), 'Şifrelenecek Dosya Thread')
-			log.info('Yazılan boyut: ' + str(self.yazilan), 'Şifrelenecek Dosya Thread')
+			log.output('Okunan boyut: ' + str(self.okunan), 'Şifrelenecek Dosya Thread')
+			log.output('Yazılan boyut: ' + str(self.yazilan), 'Şifrelenecek Dosya Thread')
 
 			self.buffer_coz.insert(self.end2, '\n\nOkunan bayt: ' + str(self.okunan))
 			self.buffer_coz.insert(self.end2, '\nYazılan bayt: ' + str(self.yazilan))
@@ -141,7 +143,7 @@ def sifre_cozme_thread(self, widget):
 
 			log.error('Dosya şifrelenemedi', 'Şifrelenecek Dosya Thread')
 			log.error('Durum kodu: ' + str(komut.returncode), 'Şifrelenecek Dosya Thread')
-			log.info('Son değer: \n' + str(error), 'Şifrelenecek Dosya Thread')
+			log.output('Son değer: \n' + str(error), 'Şifrelenecek Dosya Thread')
 
 			self.buffer_coz.insert(self.end2, '\n\n Dosya çözümlenemedi. Başlıca sebepleri şunlar olabilir:\n')
 			self.buffer_coz.insert(self.end2, '* Cipher Yanlış\n* Digest Yanlış\n* Parola Yanlış\n* Şifreli dosya hasar görmüş.')
@@ -198,7 +200,7 @@ def Genrsa_thread(self, widget):
 		
 			log.info('Çözümleme başarılı', 'RSA GEN Thread')
 			log.info('Durum kodu: ' + str(komut.returncode), 'RSA GEN Thread')
-			log.info('Son değer: \n' + str(error), 'RSA GEN Thread')
+			log.output('Son değer: \n' + str(error), 'RSA GEN Thread')
 
 			self.rsa_gen_buffer.insert(self.end, '\n\n' + str(error))
 
@@ -245,7 +247,7 @@ def Genrsa_thread(self, widget):
 
 			log.error('Dosya şifrelenemedi', 'RSA GEN Thread')
 			log.error('Durum kodu: ' + str(komut.returncode), 'RSA GEN Thread')
-			log.error('Son değer: \n' + str(error), 'RSA GEN Thread')
+			log.output('Son değer: \n' + str(error), 'RSA GEN Thread')
 
 			self.rsa_gen_buffer.insert(self.end, '\n\nAnahtar oluşturma sırasında bir hata ile karşılaşıldı.')
 			self.rsa_gen_buffer.insert(self.end, '\n\n' + str(error))
